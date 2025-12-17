@@ -11,12 +11,5 @@
       "src": "/(.*)",
       "dest": "/api/index.ts"
     }
-  ],
-  "functions": {
-    "api/index.ts": {
-      "includeFiles": "dist/**",
-      "memory": 1024,
-      "maxDuration": 30
-    }
-  }
+  ]
 }

@@ -1378,7 +1378,7 @@ private async logAuditEvent(
     ]);
 
     // Format logs to match frontend expectations
-    const formattedLogs = logs.map(log => ({
+    const formattedLogs = logs.map((log: any) => ({
       id: log.id,
       action: log.action,
       resourceType: log.resourceType,
@@ -1519,7 +1519,7 @@ private async logAuditEvent(
     ]);
 
     // Format events to match frontend expectations
-    const formattedLogs = events.map(log => {
+    const formattedLogs = events.map((log: any) => {
       let metadata: any = log.metadata;
       if (typeof metadata === 'string') {
         try { metadata = JSON.parse(metadata); } catch (e) { metadata = {}; }
@@ -1748,7 +1748,7 @@ async completeOAuthSetup(
         orderBy: { createdAt: 'desc' },
       });
 
-      return userTenants.map((ut) => ({
+      return userTenants.map((ut: any) => ({
         id: ut.tenant.id,
         name: ut.tenant.name,
         subdomain: ut.tenant.subdomain,
@@ -1756,7 +1756,7 @@ async completeOAuthSetup(
         status: ut.tenant.status,
         createdAt: ut.tenant.createdAt,
         isOwner: ut.isOwner,
-        isActive: ut.tenant.id === userTenants.find((u) => u.userId === userId && u.tenantId === ut.tenant.id)?.tenantId,
+        isActive: ut.tenant.id === userTenants.find((u: any) => u.userId === userId && u.tenantId === ut.tenant.id)?.tenantId,
       }));
     } catch (error) {
       this.logger.error('Error in getUserMarkets:', error);

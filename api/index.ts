@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { ValidationPipe, Logger } from '@nestjs/common';
-import * as express from 'express';
+import express, { Express, Request, Response } from 'express';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import cookieParser from 'cookie-parser';
@@ -11,9 +11,9 @@ import { AppModule } from '../src/app.module';
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 // Cache the NestJS app instance to avoid re-initialization on each request
-let cachedApp: express.Express | null = null;
+let cachedApp: Express | null = null;
 
-async function createApp(): Promise<express.Express> {
+async function createApp(): Promise<Express> {
   if (cachedApp) {
     return cachedApp;
   }
@@ -74,7 +74,7 @@ async function createApp(): Promise<express.Express> {
 }
 
 // Vercel serverless function handler
-export default async function handler(req: express.Request, res: express.Response) {
+export default async function handler(req: Request, res: Response) {
   try {
     const app = await createApp();
     // Forward the request to the Express app

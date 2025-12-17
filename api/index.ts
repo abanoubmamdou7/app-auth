@@ -8,7 +8,18 @@ import cookieParser from 'cookie-parser';
 import { AppModule } from '../src/app.module';
 
 // Load environment variables
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+// In Vercel, environment variables are automatically available via process.env
+// Only load .env file if it exists (for local development)
+try {
+  dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+} catch (error) {
+  // Ignore if .env file doesn't exist (normal in Vercel)
+}
+
+// Validate required environment variables
+if (!process.env.DATABASE_URL) {
+  console.error('❌ DATABASE_URL is not set. Please configure it in Vercel environment variables.');
+}
 
 // Cache the NestJS app instance to avoid re-initialization on each request
 let cachedApp: Express | null = null;

@@ -54,6 +54,7 @@ async function bootstrap() {
         'Idempotency-Key'
       ],
       preflightContinue: false,
+      
       optionsSuccessStatus: 204,
     });
     

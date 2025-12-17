@@ -1462,7 +1462,7 @@ private async logAuditEvent(
       this.prismaService.auditLog.count({ where }),
     ]);
 
-    const formattedLogs = logs.map((log) => {
+    const formattedLogs = logs.map((log: any) => {
       let meta: any = log.metadata;
       if (typeof meta === 'string') {
         try { meta = JSON.parse(meta); } catch (e) { meta = {}; }

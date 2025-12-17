@@ -29,12 +29,23 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
-    try {
-      await this.prisma.$connect();
-      this.logger.log('Auth Prisma connected to database');
-    } catch (error) {
-      this.logger.error('Failed to connect to Auth database: ' + error);
-      throw error;
+    // Use lazy connection for serverless environments (Vercel)
+    // Prisma will connect automatically on first query
+    // This prevents blocking app initialization if database is temporarily unavailable
+    const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME;
+    
+    if (!isServerless) {
+      // For traditional server deployments, connect eagerly
+      try {
+        await this.prisma.$connect();
+        this.logger.log('Auth Prisma connected to database');
+      } catch (error) {
+        this.logger.error('Failed to connect to Auth database: ' + error);
+        throw error;
+      }
+    } else {
+      // In serverless, don't connect eagerly - Prisma will connect on first query
+      this.logger.log('Auth Prisma configured for lazy connection (serverless mode)');
     }
   }
 
@@ -44,6 +55,7 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   }
 
   // Expose all Prisma models
+  // Prisma Client will connect automatically on first query
   get user() {
     return this.prisma.user;
   }

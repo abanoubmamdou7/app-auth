@@ -7,9 +7,20 @@ export class AppController {
   @SkipThrottle()
   getHealth() {
     return {
-      success: true,
+      ok: true,
       service: 'app-auth',
       status: 'running',
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  @Get('health')
+  @SkipThrottle()
+  getHealthCheck() {
+    return {
+      ok: true,
+      service: 'app-auth',
+      status: 'healthy',
       timestamp: new Date().toISOString(),
     };
   }
